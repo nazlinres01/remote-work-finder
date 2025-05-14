@@ -7,6 +7,8 @@ import MyApplications from "./pages/MyApplications";
 import SavedJobs from "./pages/SavedJobs";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import Profile from "./pages/Profile";
+import UploadCV from "./pages/UploadCV";
 
 const App = () => {
   return (
@@ -20,6 +22,13 @@ const App = () => {
         <Route path="/saved-jobs" element={<SavedJobs />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/upload-cv" element={<UploadCV />} />
+
+        
+
+
+        
 
         {/* Add more routes as needed */}
       </Routes>
