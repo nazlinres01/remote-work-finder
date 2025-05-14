@@ -9,6 +9,8 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Profile from "./pages/Profile";
 import UploadCV from "./pages/UploadCV";
+import PostJob from "./pages/PostJob";
+import MyPostedJobs from "./pages/MyPostedJobs";
 
 const App = () => {
   return (
@@ -24,6 +26,10 @@ const App = () => {
         <Route path="/signup" element={<Signup />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/upload-cv" element={<UploadCV />} />
+        <Route path="/post-job" element={<PostJob />} />
+        <Route path="/my-posted-jobs" element={<MyPostedJobs />} />
+
+
 
         
 
