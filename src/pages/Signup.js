@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Container, Row, Col, Card, Form, Button, Alert, Spinner, Tabs, Tab } from 'react-bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -27,16 +26,16 @@ const Signup = () => {
 
   const validate = () => {
     const newErrors = {};
-    
-    if (!formData.name) newErrors.name = 'Name is required';
-    if (!formData.email) newErrors.email = 'Email is required';
-    else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Email is invalid';
-    if (!formData.password) newErrors.password = 'Password is required';
-    else if (formData.password.length < 8) newErrors.password = 'Password must be at least 8 characters';
-    if (formData.password !== formData.confirmPassword) newErrors.confirmPassword = 'Passwords do not match';
-    if (userType === 'employer' && !formData.company) newErrors.company = 'Company name is required';
-    if (!termsAccepted) newErrors.terms = 'You must accept the terms';
-    
+
+    if (!formData.name) newErrors.name = 'İsim gerekli';
+    if (!formData.email) newErrors.email = 'Email gerekli';
+    else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Geçerli bir email giriniz';
+    if (!formData.password) newErrors.password = 'Şifre gerekli';
+    else if (formData.password.length < 8) newErrors.password = 'Şifre en az 8 karakter olmalı';
+    if (formData.password !== formData.confirmPassword) newErrors.confirmPassword = 'Şifreler uyuşmuyor';
+    if (userType === 'employer' && !formData.company) newErrors.company = 'Şirket adı gerekli';
+    if (!termsAccepted) newErrors.terms = 'Kullanım koşullarını kabul etmelisiniz';
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -45,7 +44,6 @@ const Signup = () => {
     e.preventDefault();
     if (validate()) {
       setSubmitStatus('loading');
-      // Mock API call
       setTimeout(() => {
         console.log('Signup data:', { ...formData, userType });
         setSubmitStatus('success');
@@ -58,133 +56,150 @@ const Signup = () => {
     <Container className="d-flex align-items-center justify-content-center" style={{ minHeight: '100vh' }}>
       <Row className="w-100">
         <Col md={8} lg={6} className="mx-auto">
-          <Card className="shadow">
-            <Card.Body>
-              <div className="text-center mb-4">
-                <h2>Create Your Account</h2>
-                <p className="text-muted">Join as a job seeker or employer</p>
-              </div>
+          <Card className="shadow-lg border-0 rounded-4">
+            <Card.Body className="p-5">
+              <h2 className="mb-4 text-center fw-bold text-primary">Kayıt Ol</h2>
+              <p className="text-center text-secondary mb-4">
+                İş arayan veya işveren olarak katılın
+              </p>
 
               <Tabs
                 activeKey={userType}
                 onSelect={(k) => setUserType(k)}
-                className="mb-4 justify-content-center"
+                className="mb-4 justify-content-center border-bottom-0"
+                variant="pills"
+                mountOnEnter
+                unmountOnExit
               >
-                <Tab eventKey="jobSeeker" title="Job Seeker" />
-                <Tab eventKey="employer" title="Employer" />
+                <Tab eventKey="jobSeeker" title="İş Arayan" tabClassName="fw-semibold text-uppercase px-4 py-2" />
+                <Tab eventKey="employer" title="İşveren" tabClassName="fw-semibold text-uppercase px-4 py-2" />
               </Tabs>
 
               {submitStatus === 'success' && (
                 <Alert variant="success" className="text-center">
-                  Registration successful! Please check your email.
+                  Kayıt başarılı! Lütfen e-postanızı kontrol edin.
                 </Alert>
               )}
 
-              <Form onSubmit={handleSubmit}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Full Name</Form.Label>
+              <Form noValidate onSubmit={handleSubmit}>
+                <Form.Group className="mb-4">
+                  <Form.Label className="fw-semibold">İsim Soyisim</Form.Label>
                   <Form.Control
                     type="text"
                     name="name"
+                    placeholder="Adınız Soyadınız"
                     value={formData.name}
                     onChange={handleChange}
                     isInvalid={!!errors.name}
+                    size="lg"
+                    className="rounded-3"
                   />
-                  <Form.Control.Feedback type="invalid">
+                  <Form.Control.Feedback type="invalid" className="ps-3">
                     {errors.name}
                   </Form.Control.Feedback>
                 </Form.Group>
 
                 {userType === 'employer' && (
-                  <Form.Group className="mb-3">
-                    <Form.Label>Company Name</Form.Label>
+                  <Form.Group className="mb-4">
+                    <Form.Label className="fw-semibold">Şirket Adı</Form.Label>
                     <Form.Control
                       type="text"
                       name="company"
+                      placeholder="Şirketinizin adı"
                       value={formData.company}
                       onChange={handleChange}
                       isInvalid={!!errors.company}
+                      size="lg"
+                      className="rounded-3"
                     />
-                    <Form.Control.Feedback type="invalid">
+                    <Form.Control.Feedback type="invalid" className="ps-3">
                       {errors.company}
                     </Form.Control.Feedback>
                   </Form.Group>
                 )}
 
-                <Form.Group className="mb-3">
-                  <Form.Label>Email address</Form.Label>
+                <Form.Group className="mb-4">
+                  <Form.Label className="fw-semibold">Email Adresi</Form.Label>
                   <Form.Control
                     type="email"
                     name="email"
+                    placeholder="email@example.com"
                     value={formData.email}
                     onChange={handleChange}
                     isInvalid={!!errors.email}
+                    size="lg"
+                    className="rounded-3"
                   />
-                  <Form.Control.Feedback type="invalid">
+                  <Form.Control.Feedback type="invalid" className="ps-3">
                     {errors.email}
                   </Form.Control.Feedback>
                 </Form.Group>
 
-                <Form.Group className="mb-3">
-                  <Form.Label>Password</Form.Label>
+                <Form.Group className="mb-4">
+                  <Form.Label className="fw-semibold">Şifre</Form.Label>
                   <Form.Control
                     type="password"
                     name="password"
+                    placeholder="Şifreniz"
                     value={formData.password}
                     onChange={handleChange}
                     isInvalid={!!errors.password}
+                    size="lg"
+                    className="rounded-3"
                   />
-                  <Form.Control.Feedback type="invalid">
+                  <Form.Control.Feedback type="invalid" className="ps-3">
                     {errors.password}
-                  </Form.Control.Feedback>
-                  <Form.Text className="text-muted">
-                    At least 8 characters
-                  </Form.Text>
-                </Form.Group>
-
-                <Form.Group className="mb-3">
-                  <Form.Label>Confirm Password</Form.Label>
-                  <Form.Control
-                    type="password"
-                    name="confirmPassword"
-                    value={formData.confirmPassword}
-                    onChange={handleChange}
-                    isInvalid={!!errors.confirmPassword}
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    {errors.confirmPassword}
                   </Form.Control.Feedback>
                 </Form.Group>
 
                 <Form.Group className="mb-4">
+                  <Form.Label className="fw-semibold">Şifre Tekrar</Form.Label>
+                  <Form.Control
+                    type="password"
+                    name="confirmPassword"
+                    placeholder="Şifrenizi tekrar girin"
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
+                    isInvalid={!!errors.confirmPassword}
+                    size="lg"
+                    className="rounded-3"
+                  />
+                  <Form.Control.Feedback type="invalid" className="ps-3">
+                    {errors.confirmPassword}
+                  </Form.Control.Feedback>
+                </Form.Group>
+
+                <Form.Group className="mb-4 d-flex align-items-center">
                   <Form.Check
                     type="checkbox"
+                    id="terms"
                     label={
                       <>
-                        I agree to the{' '}
-                        <Link to="/terms-of-service" className="text-decoration-none">
-                          Terms of Service
-                        </Link>{' '}
-                        and{' '}
-                        <Link to="/privacy-policy" className="text-decoration-none">
-                          Privacy Policy
-                        </Link>
+                        <span>Kullanım koşullarını ve gizlilik politikasını kabul ediyorum.</span>{' '}
+                        <a href="/terms-of-service" target="_blank" rel="noopener noreferrer">
+                          Koşullar
+                        </a>{' '}
+                        ve{' '}
+                        <a href="/privacy-policy" target="_blank" rel="noopener noreferrer">
+                          Gizlilik Politikası
+                        </a>
                       </>
                     }
                     checked={termsAccepted}
-                    onChange={() => setTermsAccepted(!termsAccepted)}
+                    onChange={(e) => setTermsAccepted(e.target.checked)}
                     isInvalid={!!errors.terms}
+                    feedback={errors.terms}
+                    feedbackType="invalid"
                   />
-                  {errors.terms && (
-                    <div className="text-danger small mt-1">{errors.terms}</div>
-                  )}
                 </Form.Group>
 
-                <div className="d-grid gap-2">
-                  <Button 
-                    variant="primary" 
+                <div className="d-grid mb-4">
+                  <Button
+                    variant="success"
+                    size="lg"
                     type="submit"
                     disabled={submitStatus === 'loading'}
+                    className="shadow-sm"
                   >
                     {submitStatus === 'loading' ? (
                       <>
@@ -196,41 +211,22 @@ const Signup = () => {
                           aria-hidden="true"
                           className="me-2"
                         />
-                        Creating account...
+                        Kayıt oluyor...
                       </>
                     ) : (
-                      'Sign Up'
+                      'Kayıt Ol'
                     )}
                   </Button>
                 </div>
               </Form>
 
-              <div className="text-center mt-3">
+              <div className="text-center">
                 <p className="text-muted">
-                  Already have an account?{' '}
-                  <Link to="/login" className="text-decoration-none">
-                    Sign in
+                  Zaten hesabınız var mı?{' '}
+                  <Link to="/login" className="text-decoration-none fw-semibold text-success">
+                    Giriş Yap
                   </Link>
                 </p>
-              </div>
-
-              <div className="position-relative text-center my-4">
-                <hr />
-                <span className="position-absolute bg-white px-3" style={{ top: '-10px' }}>
-                  OR
-                </span>
-              </div>
-
-              <div className="d-flex justify-content-center gap-3">
-                <Button variant="outline-primary" className="rounded-circle">
-                  <i className="bi bi-google"></i>
-                </Button>
-                <Button variant="outline-primary" className="rounded-circle">
-                  <i className="bi bi-facebook"></i>
-                </Button>
-                <Button variant="outline-primary" className="rounded-circle">
-                  <i className="bi bi-linkedin"></i>
-                </Button>
               </div>
             </Card.Body>
           </Card>
