@@ -382,28 +382,37 @@ const Home = () => {
       </nav>
 
       {/* Hero Bölümü */}
-      <Container fluid className="bg-primary text-white py-5 text-center">
-        <h1>Hayalindeki Remote İşi Bul!</h1>
-        <p className="lead">
-          Dünyanın her yerinden çalışma fırsatları seni bekliyor.
-        </p>
+      <Container fluid className="bg-primary text-white text-center py-5">
+        <Container style={{ maxWidth: "800px" }}>
+          <h1 className="display-4 fw-bold">Hayalindeki Remote İşi Bul!</h1>
+          <p className="lead mt-3">
+            Sınırları kaldır. Dünyanın her yerinden çalışma fırsatları seni
+            bekliyor.
+          </p>
 
-        {/* Arama Çubuğu */}
-        <Form className="mt-4 mx-auto" style={{ maxWidth: "600px" }}>
-          <Row>
-            <Col md={8}>
-              <Form.Control
-                type="text"
-                placeholder="Pozisyon, teknoloji veya şirket adı..."
-              />
-            </Col>
-            <Col md={4}>
-              <Button variant="warning" className="w-100">
-                İş Ara
-              </Button>
-            </Col>
-          </Row>
-        </Form>
+          {/* Arama Formu */}
+          <Form className="mt-4">
+            <Row className="g-2">
+              <Col xs={12} md={8}>
+                <Form.Control
+                  type="text"
+                  placeholder="Pozisyon, teknoloji, şirket adı..."
+                  size="lg"
+                />
+              </Col>
+              <Col xs={12} md={4}>
+                <Button
+                  variant="warning"
+                  type="submit"
+                  className="w-100"
+                  size="lg"
+                >
+                  İş Ara
+                </Button>
+              </Col>
+            </Row>
+          </Form>
+        </Container>
       </Container>
 
       {/* Öne Çıkan İşler */}
