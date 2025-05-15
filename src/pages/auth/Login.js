@@ -10,10 +10,21 @@ const Login = () => {
   });
   const [errors, setErrors] = useState({});
   const [submitStatus, setSubmitStatus] = useState(null);
+  const [loginError, setLoginError] = useState(null);
+
+  // validUsers dizisi içinde role bilgisini ekledim
+  const validUsers = [
+    { email: 'user1@example.com', password: 'password123', role: 'user' },
+    { email: 'user2@example.com', password: 'mypassword', role: 'user' },
+    { email: 'user3@example.com', password: 'secret456', role: 'user' },
+    { email: 'admin@example.com', password: 'admin123', role: 'admin' }, // admin kullanıcı
+  ];
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+    setLoginError(null); // Her input değişiminde önceki login hatasını temizle
+    setErrors(prev => ({ ...prev, [name]: null })); // Input hata mesajını temizle
   };
 
   const validate = () => {
@@ -25,15 +36,31 @@ const Login = () => {
     return Object.keys(newErrors).length === 0;
   };
 
+  // handleSubmit fonksiyonunda yönlendirmeyi role'a göre ayarladım
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validate()) {
       setSubmitStatus('loading');
+
       setTimeout(() => {
-        // Burada API çağrısı yapılacak
-        console.log('Login data:', formData);
-        setSubmitStatus('success');
-        navigate('/dashboard'); // Başarılı giriş sonrası yönlendirme
+        const userFound = validUsers.find(
+          (user) =>
+            user.email.toLowerCase() === formData.email.toLowerCase() &&
+            user.password === formData.password
+        );
+
+        if (userFound) {
+          setSubmitStatus('success');
+          setLoginError(null);
+          if (userFound.role === 'admin') {
+            navigate('/admin'); // admin ise admin dashboard
+          } else {
+            navigate('/dashboard'); // normal kullanıcı dashboard
+          }
+        } else {
+          setSubmitStatus(null);
+          setLoginError('Email veya şifre yanlış');
+        }
       }, 1500);
     }
   };
@@ -49,6 +76,12 @@ const Login = () => {
               {submitStatus === 'success' && (
                 <Alert variant="success" className="text-center">
                   Giriş başarılı! Yönlendiriliyorsunuz...
+                </Alert>
+              )}
+
+              {loginError && (
+                <Alert variant="danger" className="text-center">
+                  {loginError}
                 </Alert>
               )}
 
