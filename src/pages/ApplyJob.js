@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Card, Form, Button, Alert, Spinner } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { featuredJobs } from './HomePage';
 
 const ApplyJob = () => {
   const { jobId } = useParams();
@@ -19,39 +20,17 @@ const ApplyJob = () => {
   const [validationErrors, setValidationErrors] = useState({});
   const [submitStatus, setSubmitStatus] = useState(null);
 
-  // Mock API call to get job details
   useEffect(() => {
-    const fetchJob = async () => {
-      try {
-        // Gerçek uygulamada API çağrısı yapılır
-        const mockJobs = [
-          {
-            id: 1,
-            title: "Senior React Developer",
-            company: "Tech Innovations Inc."
-          },
-          {
-            id: 2,
-            title: "UX/UI Designer",
-            company: "Creative Minds"
-          }
-        ];
+    const foundJob = featuredJobs.find(job => job.id.toString() === jobId);
 
-        const foundJob = mockJobs.find(job => job.id === parseInt(jobId));
-        
-        if (!foundJob) {
-          throw new Error('Job not found');
-        }
+    if (!foundJob) {
+      setError('Job not found');
+      setLoading(false);
+      return;
+    }
 
-        setJob(foundJob);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchJob();
+    setJob(foundJob);
+    setLoading(false);
   }, [jobId]);
 
   const handleInputChange = (e) => {
@@ -73,21 +52,20 @@ const ApplyJob = () => {
     const errors = {};
     if (!formData.fullName.trim()) errors.fullName = 'Full name is required';
     if (!formData.email.trim()) errors.email = 'Email is required';
-    else if (!/^\S+@\S+\.\S+$/.test(formData.email)) errors.email = 'Invalid email format';
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) errors.email = 'Invalid email format';
     if (!formData.coverLetter.trim()) errors.coverLetter = 'Cover letter is required';
     if (!formData.cvFile) errors.cvFile = 'CV is required';
-    
+
     setValidationErrors(errors);
     return Object.keys(errors).length === 0;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+
     if (validateForm()) {
       setSubmitStatus('submitting');
-      
-      // Mock API call
+
       setTimeout(() => {
         console.log('Form submitted:', {
           jobId,
@@ -148,7 +126,6 @@ const ApplyJob = () => {
                 variant="success"
                 onClick={() => {
                   navigate('/my-applications');
-                  // Formu resetlemek için:
                   setFormData({
                     fullName: '',
                     email: '',

@@ -12,10 +12,16 @@ import {
   Alert,
   Spinner,
 } from "react-bootstrap";
-import "bootstrap/dist/css/bootstrap.min.css";
-import { FaMapMarkerAlt, FaDollarSign, FaUsers, FaEye, FaClock } from "react-icons/fa";
+import {
+  FaMapMarkerAlt,
+  FaDollarSign,
+  FaUsers,
+  FaEye,
+  FaClock,
+} from "react-icons/fa";
 
-import { featuredJobs } from "./HomePage"; // Import yolu kendi projenize göre ayarlayın
+import "bootstrap/dist/css/bootstrap.min.css";
+import { featuredJobs } from "./HomePage"; // Gerekirse yolu projeye göre düzenle
 
 const JobDetail = () => {
   const { jobId } = useParams();
@@ -26,7 +32,7 @@ const JobDetail = () => {
   const [activeTab, setActiveTab] = useState("description");
 
   useEffect(() => {
-    const id = Number(jobId);
+    const id = parseInt(jobId, 10);
     const foundJob = featuredJobs.find((j) => j.id === id);
 
     if (!foundJob) {
@@ -46,7 +52,11 @@ const JobDetail = () => {
         "Strong communication skills",
         "Ability to work independently",
       ],
-      benefits: ["Flexible working hours", "Competitive salary", "Health insurance"],
+      benefits: [
+        "Flexible working hours",
+        "Competitive salary",
+        "Health insurance",
+      ],
       isRemote: foundJob.location.toLowerCase().includes("remote"),
       applicants: Math.floor(Math.random() * 50) + 1,
       views: Math.floor(Math.random() * 200) + 50,
@@ -55,6 +65,28 @@ const JobDetail = () => {
     setJob(detailedJob);
     setLoading(false);
   }, [jobId]);
+
+  const handleApply = () => {
+    navigate(`/apply/${job.id}`);
+  };
+
+  const handleSave = (id) => {
+    try {
+      const saved = JSON.parse(localStorage.getItem("savedJobIds")) || [];
+      if (!saved.includes(id)) {
+        saved.push(id);
+        localStorage.setItem("savedJobIds", JSON.stringify(saved));
+        alert("Job saved successfully!");
+        navigate("/saved-jobs"); // Kaydettikten sonra saved-jobs sayfasına yönlendir
+      } else {
+        alert("This job is already saved.");
+        navigate("/saved-jobs"); // Zaten kayıtlıysa da yönlendirebilirsin
+      }
+    } catch (error) {
+      console.error("Saving error:", error);
+      alert("An error occurred while saving the job.");
+    }
+  };
 
   if (loading) {
     return (
@@ -111,16 +143,16 @@ const JobDetail = () => {
               <div className="d-flex align-items-center gap-2 mb-3">
                 <Badge
                   bg="primary"
-                  style={{ fontWeight: "600", fontSize: "0.9rem" }}
                   pill
+                  style={{ fontWeight: "600", fontSize: "0.9rem" }}
                 >
                   {job.type}
                 </Badge>
                 {job.isRemote && (
                   <Badge
                     bg="success"
-                    style={{ fontWeight: "600", fontSize: "0.9rem" }}
                     pill
+                    style={{ fontWeight: "600", fontSize: "0.9rem" }}
                   >
                     Remote
                   </Badge>
@@ -170,6 +202,7 @@ const JobDetail = () => {
                     (e.currentTarget.style.boxShadow =
                       "0 4px 15px rgba(13, 110, 253, 0.4)")
                   }
+                  onClick={handleApply}
                 >
                   Apply Now
                 </Button>
@@ -179,6 +212,7 @@ const JobDetail = () => {
                   size="lg"
                   className="fw-semibold"
                   style={{ borderRadius: "8px" }}
+                  onClick={() => handleSave(job.id)}
                 >
                   Save Job
                 </Button>
@@ -261,6 +295,7 @@ const JobDetail = () => {
               transition: "all 0.3s ease",
               minWidth: "160px",
             }}
+            onClick={() => navigate(`/apply/${job.id}`)}
             onMouseEnter={(e) =>
               (e.currentTarget.style.boxShadow =
                 "0 6px 20px rgba(13, 110, 253, 0.7)")
@@ -272,11 +307,13 @@ const JobDetail = () => {
           >
             Apply Now
           </Button>
+
           <Button
             variant="outline-primary"
             size="lg"
             className="fw-semibold"
             style={{ borderRadius: "8px", minWidth: "160px" }}
+            onClick={() => handleSave(job.id)}
           >
             Save for Later
           </Button>
