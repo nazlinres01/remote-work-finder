@@ -416,21 +416,24 @@ const Home = () => {
       </Container>
 
       {/* Öne Çıkan İşler */}
-      <Container className="my-5">
-        <h2 className="mb-4">Öne Çıkan İşler</h2>
-        <Row>
+      <Container fluid className="py-5 px-3 px-md-4 px-lg-5">
+        <h2 className="mb-4 text-center text-primary">Öne Çıkan İşler</h2>
+        <Row className="gx-3 gy-4">
           {featuredJobs.map((job) => (
-            <Col key={job.id} md={6} className="mb-4">
-              <Card>
+            <Col key={job.id} xs={12} md={6} lg={4}>
+              <Card className="h-100 shadow-sm border-0">
                 <Card.Body>
-                  <Card.Title>{job.title}</Card.Title>
+                  <Card.Title className="fw-bold">{job.title}</Card.Title>
                   <Card.Subtitle className="mb-2 text-muted">
                     {job.company}
                   </Card.Subtitle>
-                  <Card.Text>
-                    📍 {job.location} | 💰 {job.salary}
+                  <Card.Text className="mb-3">
+                    📍 {job.location} <br />
+                    💰 {job.salary}
                   </Card.Text>
-                  <Button variant="outline-primary">Detay</Button>
+                  <Button variant="outline-primary" className="w-100">
+                    Detay
+                  </Button>
                 </Card.Body>
               </Card>
             </Col>
