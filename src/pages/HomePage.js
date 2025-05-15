@@ -1,5 +1,6 @@
 import React from "react";
 import { Container, Row, Col, Button, Form, Card } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   // Örnek iş ilanları (API'dan gelecek gerçek verilerin yerine mock data)
@@ -359,14 +360,25 @@ const Home = () => {
   return (
     <>
       {/* Navbar (Basit versiyon) */}
-      <nav className="bg-light p-3 d-flex justify-content-between align-items-center">
-        <h4 className="m-0 text-primary">RemoteWorkFinder</h4>
-        <div>
-          <Button variant="outline-primary" className="me-2">
-            Giriş Yap
-          </Button>
-          <Button variant="primary">Kayıt Ol</Button>
-        </div>
+      <nav className="navbar navbar-expand-lg bg-light shadow-sm py-3">
+        <Container className="d-flex justify-content-between align-items-center">
+          <Link to="/" className="navbar-brand text-primary fw-bold fs-4 m-0">
+            RemoteWorkFinder
+          </Link>
+          <div>
+            <Button
+              as={Link}
+              to="/login"
+              variant="outline-primary"
+              className="me-2"
+            >
+              Giriş Yap
+            </Button>
+            <Button as={Link} to="/signup" variant="primary">
+              Kayıt Ol
+            </Button>
+          </div>
+        </Container>
       </nav>
 
       {/* Hero Bölümü */}
